@@ -24,6 +24,8 @@ class Game {
 
     void draw();
 
+    void swapNumbers(int idx1, int idx2);
+
 public:
     Game();
 
