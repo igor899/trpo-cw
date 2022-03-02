@@ -4,6 +4,9 @@
 #include <SFML/Graphics.hpp>
 
 #include <iostream>
+#include <string>
+
+#define IMG_PATH "src/libfifteen/img/"
 
 class Game {
     const int width = 600;

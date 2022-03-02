@@ -31,13 +31,39 @@ void Game::getCoord(int idx, int& outX, int& outY)
 
 void Game::draw()
 {
+    std::string imgPath = IMG_PATH;
+
     int x, y;
 
+    sf::Texture texture;
+    sf::Texture number;
+    texture.loadFromFile(imgPath + "tile_64x64.png");
+    sf::Sprite spriteTexture(texture);
+
+    sf::RenderTexture renderTexture;
+
+    number.loadFromFile(imgPath + "1.png");
+
     for (int i = 0; i < 16; i++) {
-        auto shape = sf::RectangleShape(sf::Vector2f(cellSize, cellSize));
+        renderTexture.clear();
+
+        renderTexture.create(cellSize, cellSize);
+
+        renderTexture.draw(spriteTexture);
+
+        if (numbers[i] != 0) {
+            sf::Sprite spriteNumber(number);
+            number.loadFromFile(imgPath + std::to_string(numbers[i]) + ".png");
+            renderTexture.draw(spriteNumber);
+        }
+
         getCoord(i, x, y);
-        shape.setPosition(x, y);
-        shape.setFillColor(sf::Color::White);
-        window.draw(shape);
+
+        renderTexture.display();
+
+        sf::Sprite sprite(renderTexture.getTexture());
+        sprite.setPosition(x, y);
+        sprite.setScale(cellSize * 1.0 / 64, cellSize * 1.0 / 64);
+        window.draw(sprite);
     }
 }
