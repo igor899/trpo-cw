@@ -67,3 +67,10 @@ void Game::draw()
         window.draw(sprite);
     }
 }
+
+void swapNumbers(int idx1, int idx2)
+{
+    int temp = numbers[idx1];
+    numbers[idx1] = numbers[idx2];
+    numbers[idx2] = temp;
+}
