@@ -17,6 +17,10 @@ class Game {
     int boardSize = 2;
     int cellSize = (width < height ? width : height) / 4 - boardSize;
 
+    void getCoord(int i, int& outX, int& outY);
+
+    void draw();
+
 public:
     Game();
 
