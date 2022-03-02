@@ -75,4 +75,14 @@ void Game::swapNumbers(int idx1, int idx2)
     numbers[idx2] = temp;
 }
 
-
+int Game::getCellIdx(int x, int y)
+{
+    if (x < 0 || x > 4 * cellSize || y < 0 || y > 4 * cellSize)
+        return -1;
+    int xIdx = x / cellSize;
+    int yIdx = y / cellSize;
+    int resultIdx = yIdx * 4 + xIdx;
+    if (resultIdx < 0 || resultIdx > 15)
+        return -1;
+    return resultIdx;
+}

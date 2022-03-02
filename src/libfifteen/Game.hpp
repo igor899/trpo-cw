@@ -26,6 +26,8 @@ class Game {
 
     void swapNumbers(int idx1, int idx2);
 
+    int getCellIdx(int x, int y);
+
 public:
     Game();
 
