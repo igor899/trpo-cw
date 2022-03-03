@@ -14,6 +14,31 @@ void Game::run()
         while (window.pollEvent(event)) {
             if (event.type == sf::Event::Closed)
                 window.close();
+
+            if (event.type == sf::Event::MouseButtonReleased) {
+                int cellIdx = getCellIdx(
+                        sf::Mouse::getPosition(window).x,
+                        sf::Mouse::getPosition(window).y);
+                Movement move = getMovement(cellIdx);
+                switch (move) {
+                case MOVE_LEFT:
+                    swapNumbers(cellIdx, cellIdx - 1);
+                    break;
+                case MOVE_RIGHT:
+                    swapNumbers(cellIdx, cellIdx + 1);
+                    break;
+
+                case MOVE_UP:
+                    swapNumbers(cellIdx, cellIdx - 4);
+                    break;
+                case MOVE_DOWN:
+                    swapNumbers(cellIdx, cellIdx + 4);
+                    break;
+
+                default:
+                    break;
+                }
+            }
         }
         window.clear();
         draw();
@@ -87,7 +112,7 @@ int Game::getCellIdx(int x, int y)
     return resultIdx;
 }
 
-Movement Game::getMovement(int idx)
+Game::Movement Game::getMovement(int idx)
 {
     if (idx % 4 != 0 && numbers[idx - 1] == 0)
         return MOVE_LEFT;
