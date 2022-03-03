@@ -86,3 +86,16 @@ int Game::getCellIdx(int x, int y)
         return -1;
     return resultIdx;
 }
+
+Movement Game::getMovement(int idx)
+{
+    if (idx % 4 != 0 && numbers[idx - 1] == 0)
+        return MOVE_LEFT;
+    if (idx % 4 != 3 && numbers[idx + 1] == 0)
+        return MOVE_RIGHT;
+    if (idx / 4 != 0 && numbers[idx - 4] == 0)
+        return MOVE_UP;
+    if (idx / 4 != 3 && numbers[idx + 4] == 0)
+        return MOVE_DOWN;
+    return NO_MOVE;
+}

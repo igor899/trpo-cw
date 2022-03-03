@@ -28,6 +28,16 @@ class Game {
 
     int getCellIdx(int x, int y);
 
+    typedef enum Movement {
+        NO_MOVE = -1,
+        MOVE_LEFT,
+        MOVE_RIGHT,
+        MOVE_UP,
+        MOVE_DOWN
+    } Movement;
+
+    Movement getMovement(int idx);
+
 public:
     Game();
 
