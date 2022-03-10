@@ -14,6 +14,31 @@ void Game::run()
         while (window.pollEvent(event)) {
             if (event.type == sf::Event::Closed)
                 window.close();
+
+            if (event.type == sf::Event::MouseButtonReleased) {
+                int cellIdx = getCellIdx(
+                        sf::Mouse::getPosition(window).x,
+                        sf::Mouse::getPosition(window).y);
+                Movement move = getMovement(cellIdx);
+                switch (move) {
+                case MOVE_LEFT:
+                    swapNumbers(cellIdx, cellIdx - 1);
+                    break;
+                case MOVE_RIGHT:
+                    swapNumbers(cellIdx, cellIdx + 1);
+                    break;
+
+                case MOVE_UP:
+                    swapNumbers(cellIdx, cellIdx - 4);
+                    break;
+                case MOVE_DOWN:
+                    swapNumbers(cellIdx, cellIdx + 4);
+                    break;
+
+                default:
+                    break;
+                }
+            }
         }
         window.clear();
         draw();
@@ -66,4 +91,36 @@ void Game::draw()
         sprite.setScale(cellSize * 1.0 / 64, cellSize * 1.0 / 64);
         window.draw(sprite);
     }
+}
+
+void Game::swapNumbers(int idx1, int idx2)
+{
+    int temp = numbers[idx1];
+    numbers[idx1] = numbers[idx2];
+    numbers[idx2] = temp;
+}
+
+int Game::getCellIdx(int x, int y)
+{
+    if (x < 0 || x > 4 * cellSize || y < 0 || y > 4 * cellSize)
+        return -1;
+    int xIdx = x / cellSize;
+    int yIdx = y / cellSize;
+    int resultIdx = yIdx * 4 + xIdx;
+    if (resultIdx < 0 || resultIdx > 15)
+        return -1;
+    return resultIdx;
+}
+
+Game::Movement Game::getMovement(int idx)
+{
+    if (idx % 4 != 0 && numbers[idx - 1] == 0)
+        return MOVE_LEFT;
+    if (idx % 4 != 3 && numbers[idx + 1] == 0)
+        return MOVE_RIGHT;
+    if (idx / 4 != 0 && numbers[idx - 4] == 0)
+        return MOVE_UP;
+    if (idx / 4 != 3 && numbers[idx + 4] == 0)
+        return MOVE_DOWN;
+    return NO_MOVE;
 }
