@@ -9,6 +9,8 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
+      - uses: oprypin/install-sfml@v1.2.1
+
       - name: Check codestyle
         run: git ls-files *.{cpp,hpp} | xargs clang-format -i && git diff --exit-code
 

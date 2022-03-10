@@ -25,17 +25,17 @@ DEPS = $(APP_OBJECTS:.o=.d) $(LIB_OBJECTS:.o=.d)
 all: $(APP_PATH)
 
 $(APP_PATH): $(APP_OBJECTS) $(LIB_PATH)
-	$(CC) $(CFLAGS) $(LFLAGS) $^ -o $@
+	$(CC) $(CFLAGS) $^ -o $@ $(LFLAGS) 
 
 $(LIB_PATH): $(LIB_OBJECTS)
 	ar rcs $@ $^
 
 $(OBJ_PATH)/$(LIB_NAME)/%.o: $(SRC_DIR)/$(LIB_NAME)/%.cpp
 	@echo heyy
-	$(CC) $(CLFLAGS) $(LFLAGS) -c $< -o $@
+	$(CC) $(CLFLAGS) -c $< -o $@ $(LFLAGS) 
 
 $(OBJ_PATH)/$(APP_NAME)/%.o: $(SRC_DIR)/$(APP_NAME)/%.cpp
-	$(CC) $(CFLAGS) $(LFLAGS) -c $< -o $@
+	$(CC) $(CFLAGS) -c $< -o $@ $(LFLAGS) 
 
 clean:
 	$(RM) $(APP_PATH) $(LIB_PATH)
