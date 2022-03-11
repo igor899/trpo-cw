@@ -5,6 +5,8 @@ Game::Game() : window(sf::VideoMode(width, height), windowName)
     for (int i = 0; i < 16; i++)
         numbers[i] = i + 1;
     numbers[15] = 0;
+
+    getBestResult();
 }
 
 void Game::run()
@@ -55,6 +57,32 @@ void Game::getCoord(int idx, int& outX, int& outY)
     cellHeight = cellWidth = height / 4;
     outX = cellWidth * (idx % 4);
     outY = cellHeight * (idx / 4);
+}
+
+void Game::setBestResult()
+{
+    FILE* fp;
+    fp = fopen("stat.bin", "wb");
+    if (!fp) {
+        std::cerr << "Error occured!\n";
+        return;
+    }
+    fwrite(&countSteps, sizeof(int), 1, fp);
+    fclose(fp);
+
+    getBestResult();
+}
+
+void Game::getBestResult()
+{
+    FILE* fp;
+    fp = fopen("stat.bin", "rb");
+    if (!fp) {
+        std::cerr << "Error occured!\n";
+        return;
+    }
+    fread(&bestSteps, sizeof(int), 1, fp);
+    fclose(fp);
 }
 
 void Game::drawStats()

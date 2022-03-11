@@ -3,6 +3,7 @@
 
 #include <SFML/Graphics.hpp>
 
+#include <fstream>
 #include <iostream>
 #include <string>
 
@@ -46,6 +47,9 @@ class Game {
     } Movement;
 
     Movement getMovement(int idx);
+
+    void setBestResult();
+    void getBestResult();
 
 public:
     Game();
