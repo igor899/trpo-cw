@@ -1,6 +1,7 @@
 #include <libfifteen/Game.hpp>
 
-Game::Game() : window(sf::VideoMode(width, height), windowName)
+Game::Game()
+    : window(sf::VideoMode(width, height), windowName, sf::Style::Close)
 {
     for (int i = 0; i < 16; i++)
         numbers[i] = i + 1;
