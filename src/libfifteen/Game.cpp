@@ -1,10 +1,13 @@
 #include <libfifteen/Game.hpp>
 
-Game::Game() : window(sf::VideoMode(width, height), windowName)
+Game::Game()
+    : window(sf::VideoMode(width, height), windowName, sf::Style::Close)
 {
     for (int i = 0; i < 16; i++)
         numbers[i] = i + 1;
     numbers[15] = 0;
+
+    getBestResult();
 }
 
 void Game::run()
@@ -23,16 +26,19 @@ void Game::run()
                 switch (move) {
                 case MOVE_LEFT:
                     swapNumbers(cellIdx, cellIdx - 1);
+                    ++countSteps;
                     break;
                 case MOVE_RIGHT:
                     swapNumbers(cellIdx, cellIdx + 1);
+                    ++countSteps;
                     break;
-
                 case MOVE_UP:
                     swapNumbers(cellIdx, cellIdx - 4);
+                    ++countSteps;
                     break;
                 case MOVE_DOWN:
                     swapNumbers(cellIdx, cellIdx + 4);
+                    ++countSteps;
                     break;
 
                 default:
@@ -52,6 +58,70 @@ void Game::getCoord(int idx, int& outX, int& outY)
     cellHeight = cellWidth = height / 4;
     outX = cellWidth * (idx % 4);
     outY = cellHeight * (idx / 4);
+}
+
+void Game::setBestResult()
+{
+    FILE* fp;
+    fp = fopen("stat.bin", "wb");
+    if (!fp) {
+        std::cerr << "Error occured!\n";
+        return;
+    }
+    fwrite(&countSteps, sizeof(int), 1, fp);
+    fclose(fp);
+
+    getBestResult();
+}
+
+void Game::getBestResult()
+{
+    FILE* fp;
+    fp = fopen("stat.bin", "rb");
+    if (!fp) {
+        std::cerr << "Error occured!\n";
+        return;
+    }
+    fread(&bestSteps, sizeof(int), 1, fp);
+    fclose(fp);
+}
+
+void Game::drawStats()
+{
+    std::string imgPath = IMG_PATH;
+
+    int xPosition = height + 2 * boardSize;
+    int yPosition = boardSize + 2 * boardSize;
+
+    sf::Font font;
+    font.loadFromFile(imgPath + FONT_NAME);
+    sf::Text text(
+            L"R : перемешать фишки \n"
+            "S : сохранить игру \n"
+            "Q : выйти \n",
+            font,
+            14);
+    text.setPosition(sf::Vector2f(xPosition, yPosition));
+    text.setFillColor(sf::Color::Cyan);
+
+    auto statText
+            = L"Количество шагов: \n"
+              "Лучший результат: \n";
+    sf::Text stat(statText, font, 14);
+    stat.setPosition(sf::Vector2f(xPosition, yPosition + (int)(height * 0.85)));
+    stat.setFillColor(sf::Color::Cyan);
+
+    auto statResultText
+            = std::to_string(countSteps) + "\n" + std::to_string(bestSteps);
+
+    sf::Text statResult(statResultText, font, 14);
+    statResult.setPosition(sf::Vector2f(
+            width - 15 * boardSize, yPosition + (int)(height * 0.85)));
+    statResult.setFillColor(sf::Color::Cyan);
+
+    window.draw(text);
+    window.draw(stat);
+    window.draw(statResult);
 }
 
 void Game::draw()
@@ -91,6 +161,8 @@ void Game::draw()
         sprite.setScale(cellSize * 1.0 / 64, cellSize * 1.0 / 64);
         window.draw(sprite);
     }
+
+    drawStats();
 }
 
 void Game::swapNumbers(int idx1, int idx2)

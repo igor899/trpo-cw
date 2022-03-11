@@ -6,3 +6,5 @@ bin/fifteen
 *.o
 *.d
 *.a
+
+*.bin
