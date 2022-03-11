@@ -79,7 +79,6 @@ void Game::getBestResult()
     FILE* fp;
     fp = fopen("stat.bin", "rb");
     if (!fp) {
-        std::cerr << "Error occured!\n";
         return;
     }
     fread(&bestSteps, sizeof(int), 1, fp);
