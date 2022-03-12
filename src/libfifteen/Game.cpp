@@ -63,9 +63,9 @@ void Game::getCoord(int idx, int& outX, int& outY)
 void Game::setBestResult()
 {
     FILE* fp;
-    fp = fopen("stat.bin", "wb");
+    fp = fopen(FILENAME_STAT, "wb");
     if (!fp) {
-        std::cerr << "Error occured!\n";
+        std::cerr << "Error! Не могу записать в файл!\n";
         return;
     }
     fwrite(&countSteps, sizeof(int), 1, fp);
@@ -77,7 +77,7 @@ void Game::setBestResult()
 void Game::getBestResult()
 {
     FILE* fp;
-    fp = fopen("stat.bin", "rb");
+    fp = fopen(FILENAME_STAT, "rb");
     if (!fp) {
         return;
     }

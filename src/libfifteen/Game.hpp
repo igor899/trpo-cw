@@ -11,6 +11,7 @@
 #define GAME_WIDTH 600
 #define GAME_HEIGHT 400
 #define GAME_NAME "Fifteen Game"
+#define FILENAME_STAT "stat.bin"
 
 class Game {
     const int width = GAME_WIDTH;
