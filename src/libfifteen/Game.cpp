@@ -250,8 +250,8 @@ bool Game::isWin()
 void Game::checkWin()
 {
     printWin = false;
-    if (isWin()) {
-        if (bestSteps < countSteps)
+    if (isWin() && gameStarted) {
+        if (countSteps && (bestSteps == 0 || bestSteps > countSteps))
             setBestResult();
         printWin = true;
     }
