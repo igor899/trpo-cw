@@ -61,6 +61,8 @@ class Game {
     bool isWin();
     void checkWin();
 
+    int getIdxOfZero();
+
 public:
     Game();
 

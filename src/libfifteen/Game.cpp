@@ -32,6 +32,40 @@ void Game::run()
                 newGame();
             }
 
+            if (gameStarted) {
+                if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up)) {
+                    int idx = getIdxOfZero();
+                    if (getMovement(idx + 4) == MOVE_UP) {
+                        swapNumbers(idx, idx + 4);
+                        ++countSteps;
+                    }
+                }
+
+                if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down)) {
+                    int idx = getIdxOfZero();
+                    if (getMovement(idx - 4) == MOVE_DOWN) {
+                        swapNumbers(idx, idx - 4);
+                        ++countSteps;
+                    }
+                }
+
+                if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left)) {
+                    int idx = getIdxOfZero();
+                    if (getMovement(idx + 1) == MOVE_LEFT) {
+                        swapNumbers(idx, idx + 1);
+                        ++countSteps;
+                    }
+                }
+
+                if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right)) {
+                    int idx = getIdxOfZero();
+                    if (getMovement(idx - 1) == MOVE_RIGHT) {
+                        swapNumbers(idx, idx - 1);
+                        ++countSteps;
+                    }
+                }
+            }
+
             if (event.type == sf::Event::MouseButtonReleased && gameStarted) {
                 int cellIdx = getCellIdx(
                         sf::Mouse::getPosition(window).x,
@@ -145,10 +179,10 @@ void Game::drawStats()
         window.draw(winText);
     }
 
-    if (gameStarted == false) {
+    if (countSteps == 0 && gameStarted == false) {
         sf::Text winText(L"Нажмите R чтобы начать", font, 14);
         winText.setPosition(
-                sf::Vector2f(xPosition, yPosition + (int)(height * 0.6)));
+                sf::Vector2f(xPosition, yPosition + (int)(height * 0.7)));
         winText.setFillColor(sf::Color::Yellow);
         window.draw(winText);
     }
@@ -225,6 +259,14 @@ Game::Movement Game::getMovement(int idx)
     if (idx / 4 != 3 && numbers[idx + 4] == 0)
         return MOVE_DOWN;
     return NO_MOVE;
+}
+
+int Game::getIdxOfZero()
+{
+    for (int i = 0; i < 16; i++)
+        if (numbers[i] == 0)
+            return i;
+    return -1;
 }
 
 void Game::randomize()
