@@ -19,6 +19,9 @@ class Game {
     const int height = GAME_HEIGHT;
     const char* windowName = GAME_NAME;
 
+    bool printWin = false;
+    bool gameStarted = false;
+
     int* numbers = new int[16];
 
     sf::RenderWindow window;
@@ -32,8 +35,9 @@ class Game {
     void getCoord(int i, int& outX, int& outY);
 
     void draw();
-
     void drawStats();
+
+    void newGame();
 
     void swapNumbers(int idx1, int idx2);
 
@@ -53,6 +57,9 @@ class Game {
     void getBestResult();
 
     void randomize();
+
+    bool isWin();
+    void checkWin();
 
 public:
     Game();
