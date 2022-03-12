@@ -15,8 +15,15 @@ void Game::run()
     while (window.isOpen()) {
         sf::Event event;
         while (window.pollEvent(event)) {
-            if (event.type == sf::Event::Closed)
+            if (event.type == sf::Event::Closed
+                || sf::Keyboard::isKeyPressed(sf::Keyboard::Q))
                 window.close();
+
+            if (sf::Keyboard::isKeyPressed(sf::Keyboard::R)) {
+                randomize();
+                countSteps = 0;
+                getBestResult();
+            }
 
             if (event.type == sf::Event::MouseButtonReleased) {
                 int cellIdx = getCellIdx(
@@ -194,4 +201,13 @@ Game::Movement Game::getMovement(int idx)
     if (idx / 4 != 3 && numbers[idx + 4] == 0)
         return MOVE_DOWN;
     return NO_MOVE;
+}
+
+void Game::randomize()
+{
+    int randIdx;
+    for (int i = 0; i < 16; ++i) {
+        randIdx = rand() % 16;
+        swapNumbers(i, randIdx);
+    }
 }

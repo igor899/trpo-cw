@@ -4,6 +4,7 @@
 #include <SFML/Graphics.hpp>
 
 #include <iostream>
+#include <random>
 #include <string>
 
 #define IMG_PATH "src/libfifteen/img/"
@@ -50,6 +51,8 @@ class Game {
 
     void setBestResult();
     void getBestResult();
+
+    void randomize();
 
 public:
     Game();
