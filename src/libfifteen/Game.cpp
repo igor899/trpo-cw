@@ -3,6 +3,8 @@
 Game::Game()
     : window(sf::VideoMode(width, height), windowName, sf::Style::Close)
 {
+    srand(time(0));
+
     for (int i = 0; i < 16; i++)
         numbers[i] = i + 1;
     numbers[15] = 0;
@@ -145,7 +147,6 @@ void Game::drawStats()
     font.loadFromFile(imgPath + FONT_NAME);
     sf::Text text(
             L"R : перемешать фишки \n"
-            //"S : сохранить игру \n"
             "Q : выйти \n",
             font,
             14);

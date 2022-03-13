@@ -3,6 +3,7 @@
 
 #include <SFML/Graphics.hpp>
 
+#include <ctime>
 #include <iostream>
 #include <random>
 #include <string>
@@ -15,6 +16,7 @@
 #define FILENAME_STAT "stat.bin"
 
 class Game {
+protected:
     const int width = GAME_WIDTH;
     const int height = GAME_HEIGHT;
     const char* windowName = GAME_NAME;
@@ -62,6 +64,8 @@ class Game {
     void checkWin();
 
     int getIdxOfZero();
+
+    friend class GameTest;
 
 public:
     Game();
