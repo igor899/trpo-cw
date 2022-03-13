@@ -7,7 +7,14 @@ Game::Game()
         numbers[i] = i + 1;
     numbers[15] = 0;
 
+    newGame();
+}
+
+void Game::newGame()
+{
+    countSteps = 0;
     getBestResult();
+    printWin = false;
 }
 
 void Game::run()
@@ -15,10 +22,51 @@ void Game::run()
     while (window.isOpen()) {
         sf::Event event;
         while (window.pollEvent(event)) {
-            if (event.type == sf::Event::Closed)
+            if (event.type == sf::Event::Closed
+                || sf::Keyboard::isKeyPressed(sf::Keyboard::Q))
                 window.close();
 
-            if (event.type == sf::Event::MouseButtonReleased) {
+            if (sf::Keyboard::isKeyPressed(sf::Keyboard::R)) {
+                gameStarted = true;
+                randomize();
+                newGame();
+            }
+
+            if (gameStarted) {
+                if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up)) {
+                    int idx = getIdxOfZero();
+                    if (getMovement(idx + 4) == MOVE_UP) {
+                        swapNumbers(idx, idx + 4);
+                        ++countSteps;
+                    }
+                }
+
+                if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down)) {
+                    int idx = getIdxOfZero();
+                    if (getMovement(idx - 4) == MOVE_DOWN) {
+                        swapNumbers(idx, idx - 4);
+                        ++countSteps;
+                    }
+                }
+
+                if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left)) {
+                    int idx = getIdxOfZero();
+                    if (getMovement(idx + 1) == MOVE_LEFT) {
+                        swapNumbers(idx, idx + 1);
+                        ++countSteps;
+                    }
+                }
+
+                if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right)) {
+                    int idx = getIdxOfZero();
+                    if (getMovement(idx - 1) == MOVE_RIGHT) {
+                        swapNumbers(idx, idx - 1);
+                        ++countSteps;
+                    }
+                }
+            }
+
+            if (event.type == sf::Event::MouseButtonReleased && gameStarted) {
                 int cellIdx = getCellIdx(
                         sf::Mouse::getPosition(window).x,
                         sf::Mouse::getPosition(window).y);
@@ -48,6 +96,7 @@ void Game::run()
         }
         window.clear();
         draw();
+        checkWin();
         window.display();
     }
 }
@@ -96,7 +145,7 @@ void Game::drawStats()
     font.loadFromFile(imgPath + FONT_NAME);
     sf::Text text(
             L"R : перемешать фишки \n"
-            "S : сохранить игру \n"
+            //"S : сохранить игру \n"
             "Q : выйти \n",
             font,
             14);
@@ -121,6 +170,22 @@ void Game::drawStats()
     window.draw(text);
     window.draw(stat);
     window.draw(statResult);
+
+    if (printWin && countSteps && gameStarted) {
+        sf::Text winText(L"Вы выиграли!", font, 14);
+        winText.setPosition(
+                sf::Vector2f(xPosition, yPosition + (int)(height * 0.6)));
+        winText.setFillColor(sf::Color::Green);
+        window.draw(winText);
+    }
+
+    if (countSteps == 0 && gameStarted == false) {
+        sf::Text winText(L"Нажмите R чтобы начать", font, 14);
+        winText.setPosition(
+                sf::Vector2f(xPosition, yPosition + (int)(height * 0.7)));
+        winText.setFillColor(sf::Color::Yellow);
+        window.draw(winText);
+    }
 }
 
 void Game::draw()
@@ -194,4 +259,42 @@ Game::Movement Game::getMovement(int idx)
     if (idx / 4 != 3 && numbers[idx + 4] == 0)
         return MOVE_DOWN;
     return NO_MOVE;
+}
+
+int Game::getIdxOfZero()
+{
+    for (int i = 0; i < 16; i++)
+        if (numbers[i] == 0)
+            return i;
+    return -1;
+}
+
+void Game::randomize()
+{
+    int randIdx;
+    for (int i = 0; i < 16; ++i) {
+        randIdx = rand() % 16;
+        swapNumbers(i, randIdx);
+    }
+}
+
+bool Game::isWin()
+{
+    if (numbers[0] == 1 && numbers[15] == 0) {
+        for (int i = 0; i < 14; i++)
+            if (numbers[i + 1] < numbers[i])
+                return false;
+        return true;
+    }
+    return false;
+}
+
+void Game::checkWin()
+{
+    printWin = false;
+    if (isWin() && gameStarted) {
+        if (countSteps && (bestSteps == 0 || bestSteps > countSteps))
+            setBestResult();
+        printWin = true;
+    }
 }

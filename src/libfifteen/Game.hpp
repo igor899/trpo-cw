@@ -4,6 +4,7 @@
 #include <SFML/Graphics.hpp>
 
 #include <iostream>
+#include <random>
 #include <string>
 
 #define IMG_PATH "src/libfifteen/img/"
@@ -18,6 +19,9 @@ class Game {
     const int height = GAME_HEIGHT;
     const char* windowName = GAME_NAME;
 
+    bool printWin = false;
+    bool gameStarted = false;
+
     int* numbers = new int[16];
 
     sf::RenderWindow window;
@@ -31,8 +35,9 @@ class Game {
     void getCoord(int i, int& outX, int& outY);
 
     void draw();
-
     void drawStats();
+
+    void newGame();
 
     void swapNumbers(int idx1, int idx2);
 
@@ -50,6 +55,13 @@ class Game {
 
     void setBestResult();
     void getBestResult();
+
+    void randomize();
+
+    bool isWin();
+    void checkWin();
+
+    int getIdxOfZero();
 
 public:
     Game();
