@@ -2,9 +2,13 @@ a.out
 *.swp
 
 bin/fifteen
+bin/fifteen-test
 
 *.o
 *.d
 *.a
 
 *.bin
+
+lib/
+build/

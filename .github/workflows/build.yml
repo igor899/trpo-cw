@@ -16,3 +16,6 @@ jobs:
 
       - name: Build application
         run: make all
+
+      - name: Test app
+        run: make test && ./bin/fifteen-test
