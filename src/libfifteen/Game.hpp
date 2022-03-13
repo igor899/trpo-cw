@@ -26,7 +26,7 @@ protected:
 
     int* numbers = new int[16];
 
-    sf::RenderWindow window;
+    sf::RenderWindow* window = nullptr;
 
     int boardSize = 2;
     int cellSize = (width < height ? width : height) / 4 - boardSize;

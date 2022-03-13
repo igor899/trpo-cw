@@ -1,7 +1,6 @@
 #include <libfifteen/Game.hpp>
 
 Game::Game()
-    : window(sf::VideoMode(width, height), windowName, sf::Style::Close)
 {
     srand(time(0));
 
@@ -21,12 +20,15 @@ void Game::newGame()
 
 void Game::run()
 {
-    while (window.isOpen()) {
+    window = new sf::RenderWindow(
+            sf::VideoMode(width, height), windowName, sf::Style::Close);
+
+    while (window->isOpen()) {
         sf::Event event;
-        while (window.pollEvent(event)) {
+        while (window->pollEvent(event)) {
             if (event.type == sf::Event::Closed
                 || sf::Keyboard::isKeyPressed(sf::Keyboard::Q))
-                window.close();
+                window->close();
 
             if (sf::Keyboard::isKeyPressed(sf::Keyboard::R)) {
                 gameStarted = true;
@@ -70,8 +72,8 @@ void Game::run()
 
             if (event.type == sf::Event::MouseButtonReleased && gameStarted) {
                 int cellIdx = getCellIdx(
-                        sf::Mouse::getPosition(window).x,
-                        sf::Mouse::getPosition(window).y);
+                        sf::Mouse::getPosition(*window).x,
+                        sf::Mouse::getPosition(*window).y);
                 Movement move = getMovement(cellIdx);
                 switch (move) {
                 case MOVE_LEFT:
@@ -96,10 +98,10 @@ void Game::run()
                 }
             }
         }
-        window.clear();
+        window->clear();
         draw();
         checkWin();
-        window.display();
+        window->display();
     }
 }
 
@@ -168,16 +170,16 @@ void Game::drawStats()
             width - 15 * boardSize, yPosition + (int)(height * 0.85)));
     statResult.setFillColor(sf::Color::Cyan);
 
-    window.draw(text);
-    window.draw(stat);
-    window.draw(statResult);
+    window->draw(text);
+    window->draw(stat);
+    window->draw(statResult);
 
     if (printWin && countSteps && gameStarted) {
         sf::Text winText(L"Вы выиграли!", font, 14);
         winText.setPosition(
                 sf::Vector2f(xPosition, yPosition + (int)(height * 0.6)));
         winText.setFillColor(sf::Color::Green);
-        window.draw(winText);
+        window->draw(winText);
     }
 
     if (countSteps == 0 && gameStarted == false) {
@@ -185,7 +187,7 @@ void Game::drawStats()
         winText.setPosition(
                 sf::Vector2f(xPosition, yPosition + (int)(height * 0.7)));
         winText.setFillColor(sf::Color::Yellow);
-        window.draw(winText);
+        window->draw(winText);
     }
 }
 
@@ -224,7 +226,7 @@ void Game::draw()
         sf::Sprite sprite(renderTexture.getTexture());
         sprite.setPosition(x, y);
         sprite.setScale(cellSize * 1.0 / 64, cellSize * 1.0 / 64);
-        window.draw(sprite);
+        window->draw(sprite);
     }
 
     drawStats();
