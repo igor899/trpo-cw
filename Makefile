@@ -29,9 +29,9 @@ LIB_SOURCES = $(shell find $(SRC_DIR)/$(LIB_NAME) -name '*.cpp')
 LIB_OBJECTS = $(LIB_SOURCES:$(SRC_DIR)/%.cpp=$(OBJ_PATH)/%.o)
 
 TEST_SOURCES = $(shell find $(TEST_DIR) -name '*.cpp')
-TEST_OBJECTS = $(TEST_SOURCES:$(TEST_DIR)/%.cpp=$(OBJ_TEST_PATH)/%.o)
+TEST_OBJECTS = $(TEST_SOURCES:%.cpp=$(OBJ_DIR)/%.o)
 
-DEPS = $(APP_OBJECTS:.o=.d) $(LIB_OBJECTS:.o=.d) $(TEST_OBJECTS:.o=.d)
+DEPS = $(APP_OBJECTS:.o=.d) $(LIB_OBJECTS:.o=.d) 
 
 all: $(APP_PATH)
 
@@ -42,15 +42,21 @@ $(LIB_PATH): $(LIB_OBJECTS)
 	ar rcs $@ $^
 
 $(OBJ_PATH)/$(LIB_NAME)/%.o: $(SRC_DIR)/$(LIB_NAME)/%.cpp
-	$(CC) $(CLFLAGS) -c $< -o $@ $(LFLAGS) 
+	$(CC) $(CFLAGS) -c $< -o $@ $(LFLAGS) 
 
 $(OBJ_PATH)/$(APP_NAME)/%.o: $(SRC_DIR)/$(APP_NAME)/%.cpp
 	$(CC) $(CFLAGS) -c $< -o $@ $(LFLAGS) 
 
-test: all $(TEST_PATH)
+test: all $(GTEST_PATH) $(TEST_PATH)
 
-$(TEST_PATH): $(GTEST_PATH) $(LIB_PATH)
-	$(CC) $(CFLAGS) $(TEST_DIR)/main.cpp $(LIB_PATH) -I $(TEST_DIR) -o $@ $(LFLAGS) $(TESTFLAGS)
+#$(TEST_PATH): $(GTEST_PATH) $(LIB_PATH)
+#	$(CC) $(CFLAGS) $(TEST_DIR)/main.cpp $(LIB_PATH) -I $(TEST_DIR) -o $@ $(LFLAGS) $(TESTFLAGS)
+
+$(TEST_PATH): $(TEST_OBJECTS)
+	$(CC) $(CFLAGS) -I $(TEST_DIR) $^ $(LIB_PATH) -o $@ $(LFLAGS) $(TESTFLAGS)
+
+$(OBJ_DIR)/$(TEST_DIR)/%.o: $(TEST_DIR)/%.cpp
+	$(CC) $(CFLAGS) -c $< -I $(TEST_DIR) -o $@ $(LFLAGS) $(TESTFLAGS)
 
 $(GTEST_PATH): $(GTEST_SRC_PATH)
 	 cd $(GTEST_SRC_PATH) &&\
@@ -65,8 +71,12 @@ $(GTEST_SRC_PATH):
 	git clone https://github.com/google/googletest.git $@
 
 clean:
-	$(RM) $(APP_PATH) $(LIB_PATH)
+	$(RM) $(APP_PATH) $(LIB_PATH) $(TEST_PATH)
 	find $(OBJ_DIR) -name '*.[od]' -exec $(RM) '{}' \;
+	$(RM) "bin/*" -f
+
+clean-all: clean
+	$(RM) build/ lib/ -r
 
 .PHONY: all clean
 

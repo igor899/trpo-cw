@@ -9,86 +9,86 @@ protected:
     int* get_numbers()
     {
         return game.numbers;
-    };
+    }
     bool get_printWin()
     {
         return game.printWin;
-    };
+    }
     bool get_gameStarted()
     {
         return game.gameStarted;
-    };
+    }
     int get_countSteps()
     {
         return game.countSteps;
-    };
+    }
     int get_bestSteps()
     {
         return game.bestSteps;
-    };
+    }
 
     void newGame()
     {
         game.newGame();
-    };
+    }
     void swapNumbers(int idx1, int idx2)
     {
         game.swapNumbers(idx1, idx2);
-    };
+    }
     void setBestResult()
     {
         game.setBestResult();
-    };
+    }
     void getBestResult()
     {
         game.getBestResult();
-    };
+    }
     void randomize()
     {
         game.randomize();
-    };
+    }
     void checkWin()
     {
         game.checkWin();
-    };
+    }
     void getCoord(int i, int& outX, int& outY)
     {
         game.getCoord(i, outX, outY);
-    };
+    }
 
     bool isWin()
     {
         return game.isWin();
-    };
+    }
     int getCellIdx(int x, int y)
     {
         return game.getCellIdx(x, y);
-    };
+    }
     int getIdxOfZero()
     {
         return game.getIdxOfZero();
-    };
+    }
     Game::Movement getMovement(int idx)
     {
         return getMovement(idx);
-    };
+    }
 
     void set_gameStarted_true()
     {
         game.gameStarted = true;
-    };
+    }
     void set_countSteps(int x)
     {
         game.countSteps = x;
-    };
+    }
     void set_bestSteps(int x)
     {
         game.bestSteps = x;
-    };
+    }
     void set_printWin(bool x)
     {
         game.printWin = x;
-    };
+    }
 
 public:
     Game game;
