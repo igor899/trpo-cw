@@ -1,9 +1,5 @@
 **Курсовая работа «Пятнашки»**
----
-Разработчики:
-* [ArtStyl](https://github.com/ArtStyl)
-* [igor899](https://github.com/igor899)
-* [zhiga10](https://github.com/zhiga10)
+
 ---
 
 ## Игра "Пятнашки".
