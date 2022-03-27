@@ -2,7 +2,7 @@ APP_NAME = fifteen
 LIB_NAME = lib$(APP_NAME)
 TEST_NAME = $(APP_NAME)-test
 
-CC = g++ -g
+CC = g++
 CFLAGS = -W -Wall -Wextra -Werror
 LFLAGS = -I src -MP -MMD -lsfml-graphics -lsfml-window -lsfml-system
 TESTFLAGS = -pthread -lgtest -I $(GTEST_SRC_PATH)/googletest/include/ -Llib 
